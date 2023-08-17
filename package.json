@@ -1,0 +1,25 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "test": "node --test __tests__/",
+    "test:watch": "node --test --watch __tests__/",
+    "migrate:up": "npx knex migrate:latest",
+    "migrate:down": "npx knex migrate:down"
+  },
+  "keywords": [],
+  "author": "github.com/natancs",
+  "license": "ISC",
+  "dependencies": {
+    "knex": "^2.5.1",
+    "sqlite3": "^5.1.6"
+  },
+  "engines": {
+    "node": "v20.5.1"
+  }
+}
