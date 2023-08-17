@@ -1,13 +1,10 @@
 import { once } from "node:events"
 import { DEFAULT_HEADER } from "./index.routes.js"
-import { UserRepository } from '../repository/UserRepository.js';
 import { UserEntity } from "../entity/User.js";
+import { ContextStrategy } from "../strategies/context.js";
+import { SQLiteStrategy } from "../strategies/SQLiteStrategy.js";
 
 export class CreateUser {
-  constructor() {
-    this.userRepository = new UserRepository()
-  }
-
   async handler(request, response) {
     const data = JSON.parse(await once(request, 'data'))
     const user = new UserEntity(data)
@@ -18,7 +15,9 @@ export class CreateUser {
       return response.end()
     }
 
-    await this.userRepository.create(user)
+    const sqliteStrategy = new SQLiteStrategy("users")
+    const contextStrategy = new ContextStrategy(sqliteStrategy)
+    await contextStrategy.create(user)
 
     response.writeHead(201, DEFAULT_HEADER)
     response.write(JSON.stringify({ message: "User created!", id: user.id }))
