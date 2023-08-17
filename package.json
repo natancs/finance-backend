@@ -7,8 +7,9 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "node --watch src/index.js",
-    "test": "node --test __tests__/",
-    "test:watch": "node --test --watch __tests__/",
+    "test": "NODE_ENV=test node --test test/",
+    "test:watch": "NODE_ENV=test node --test --watch test/",
+    "test:cov-native": "NODE_ENV=test node --experimental-test-coverage --test test/",
     "migrate:up": "npx knex migrate:latest",
     "migrate:down": "npx knex migrate:down"
   },
@@ -20,6 +21,6 @@
     "sqlite3": "^5.1.6"
   },
   "engines": {
-    "node": "v20.5.1"
+    "node": "v20.5.0"
   }
 }
