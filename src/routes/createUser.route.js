@@ -2,7 +2,7 @@ import { once } from "node:events"
 import { DEFAULT_HEADER } from "./index.routes.js"
 import { UserEntity } from "../entity/User.js";
 import { ContextStrategy } from "../strategies/context.js";
-import { SQLiteStrategy } from "../strategies/SQLiteStrategy.js";
+import { InMemoryStrategy } from "../strategies/InMemoryStrategy.js";
 
 export class CreateUser {
   async handler(request, response) {
@@ -15,8 +15,8 @@ export class CreateUser {
       return response.end()
     }
 
-    const sqliteStrategy = new SQLiteStrategy("users")
-    const contextStrategy = new ContextStrategy(sqliteStrategy)
+    const inMemoryStrategy = new InMemoryStrategy("users")
+    const contextStrategy = new ContextStrategy(inMemoryStrategy)
     await contextStrategy.create(user)
 
     response.writeHead(201, DEFAULT_HEADER)

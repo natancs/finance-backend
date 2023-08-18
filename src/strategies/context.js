@@ -7,7 +7,7 @@ export class ContextStrategy {
     return this.strategy.create(data)
   }
 
-  list(id = null) {
+  find(id = null) {
     return this.strategy.list(id)
   }
 

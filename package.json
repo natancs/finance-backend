@@ -7,9 +7,9 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "node --watch src/index.js",
-    "test": "NODE_ENV=test node --test test/",
-    "test:watch": "NODE_ENV=test node --test --watch test/",
-    "test:cov-native": "NODE_ENV=test node --experimental-test-coverage --test test/",
+    "test": "node --test __test__/",
+    "test:watch": "node --test --watch __test__/",
+    "test:cov-native": "node --experimental-test-coverage --test __test__/",
     "migrate:up": "npx knex migrate:latest",
     "migrate:down": "npx knex migrate:down"
   },
