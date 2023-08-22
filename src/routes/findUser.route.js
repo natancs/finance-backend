@@ -5,18 +5,16 @@ import { InMemoryStrategy } from "../strategies/InMemoryStrategy.js";
 
 export class FindUser {
   async handler(request, response) {
-    const [,,id] = request.url.split('/')
-
-
-    // if (!user._isValid().valid) {
-    //   response.writeHead(400, DEFAULT_HEADER)
-    //   response.write(JSON.stringify({ error: user._isValid().error }))
-    //   return response.end()
-    // }
-
+    const [, , id] = request.url.split('/')
     const inMemoryStrategy = new InMemoryStrategy(inMemoryDB)
     const contextStrategy = new ContextStrategy(inMemoryStrategy)
     const findUser = await contextStrategy.find(id)
+
+    if (findUser === 'user not found!') {
+      response.writeHead(400, DEFAULT_HEADER)
+      response.write(JSON.stringify({ error: findUser }))
+      return response.end()
+    }
 
     response.writeHead(200, DEFAULT_HEADER)
     response.write(JSON.stringify(findUser))

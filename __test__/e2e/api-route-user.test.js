@@ -6,6 +6,11 @@ describe("API Suit of Test in route /user", () => {
   let BASE_URL = ''
   let _server = {}
   let MOCK_ID = ''
+  const MOCK_UPDATED_USER = {
+    name: "natanael",
+    email: "natan@gmail.com",
+    password: "<PASSWORD>"
+  }
 
   before(async () => {
     _server = app
@@ -106,7 +111,6 @@ describe("API Suit of Test in route /user", () => {
       const expectedCode = 200
       const response = await result.json()
       const expectedBody = { id: MOCK_ID, ...response }
-      console.log("Query string", MOCK_ID)
 
       assert.strictEqual(
         result.status,
@@ -119,5 +123,29 @@ describe("API Suit of Test in route /user", () => {
         `should return ${expectedCode}, actual: ${result.status}`
       )
     })
+
+    it('should return a error if id not exists', async () => {
+      const result = await fetch(`${BASE_URL}/user/2`, {
+        method: "GET",
+      })
+      const expectedCode = 400
+      const response = await result.json()
+      const expectedBody = { error: "user not found!" }
+
+      assert.strictEqual(
+        result.status,
+        expectedCode,
+        `status code should be ${expectedCode}, actual: ${result.status}`
+      )
+      assert.deepStrictEqual(
+        response,
+        expectedBody,
+        `should return ${expectedCode}, actual: ${result.status}`
+      )
+    })
+  })
+
+  describe('Suite of test with method POST', () => {
+    it('should update a user by id', async () => { })
   })
 })

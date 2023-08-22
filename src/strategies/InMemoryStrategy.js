@@ -7,14 +7,22 @@ export class InMemoryStrategy extends ContextStrategy {
   }
 
   create(data) {
-    return this.db.push(data)
+    this.db.push(data)
+    return data
   }
 
   find(id) {
-    const itens = this.db.find(item => item.id === id)
+    let result = ''
 
-    if (!id) {
-      return this.db
-    }
+    if (id) {
+      result = this.db.find(item => item.id === id)
+      if (result === undefined) {
+        result = "user not found!"
+      }
+    } else (
+      result = this.db
+    )
+
+    return result
   }
 }
