@@ -1,4 +1,5 @@
 import { CreateUser } from "./createUser.route.js"
+import { FindUser } from "./findUser.route.js"
 
 export const DEFAULT_HEADER = {
   'Content-Type': 'application/json'
@@ -7,8 +8,7 @@ export const DEFAULT_HEADER = {
 export class Routes {
   static async main(request, response) {
     const { url, method } = request
-    const [, route, id] = url.split('/')
-    request.queryString = { id: !id ? id : id.replace(/["]/g, '') }
+    const [, route] = url.split('/')
 
     const key = `/${route}:${method.toLowerCase()}`
 
@@ -27,5 +27,9 @@ export class Routes {
 
   async "/user:post"(request, response) {
     return new CreateUser().handler(request, response)
+  }
+
+  async "/user:get"(request, response) {
+    return new FindUser().handler(request, response)
   }
 }

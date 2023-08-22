@@ -1,4 +1,5 @@
 import { once } from "node:events"
+import {inMemoryDB} from "../database/inMemoryDB.js"
 import { DEFAULT_HEADER } from "./index.routes.js"
 import { UserEntity } from "../entity/User.js";
 import { ContextStrategy } from "../strategies/context.js";
@@ -15,7 +16,7 @@ export class CreateUser {
       return response.end()
     }
 
-    const inMemoryStrategy = new InMemoryStrategy("users")
+    const inMemoryStrategy = new InMemoryStrategy(inMemoryDB)
     const contextStrategy = new ContextStrategy(inMemoryStrategy)
     await contextStrategy.create(user)
 
