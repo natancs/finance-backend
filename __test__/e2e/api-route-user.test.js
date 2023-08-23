@@ -155,9 +155,10 @@ describe("API Suit of Test in route /user", () => {
       const expectedCode = 200
       const response = await result.json()
       const expectedBody = { message: "user updated!" }
-      const findUser = await fetch(`${BASE_URL}/user/${MOCK_ID}`, {
+      const resultFindUser = await fetch(`${BASE_URL}/user/${MOCK_ID}`, {
         method: "GET",
       })
+      const findUser = await resultFindUser.json()
 
       const expectedUser = { id: MOCK_ID, ...MOCK_UPDATED_USER }
 
@@ -166,16 +167,16 @@ describe("API Suit of Test in route /user", () => {
         expectedCode,
         `status code should be ${expectedCode}, actual: ${result.status}`
       )
-      // assert.deepStrictEqual(
-      //   response,
-      //   expectedBody,
-      //   `should return ${expectedCode}, actual: ${result.status}`
-      // )
-      // assert.strictEqual(
-      //   findUser,
-      //   expectedUser,
-      //   `user updated should equal ${expectedUser}: actual ${findUser}`
-      // )
+      assert.deepStrictEqual(
+        response,
+        expectedBody,
+        `should return ${expectedCode}, actual: ${result.status}`
+      )
+      assert.deepStrictEqual(
+        findUser,
+        expectedUser,
+        `user updated should equal ${expectedUser}: actual ${findUser}`
+      )
     })
     it('should return a error if any paramters is invalid', async () => {
       const result = await fetch(`${BASE_URL}/user/${MOCK_ID}`, {
