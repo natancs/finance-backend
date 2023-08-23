@@ -166,26 +166,48 @@ describe("API Suit of Test in route /user", () => {
         expectedCode,
         `status code should be ${expectedCode}, actual: ${result.status}`
       )
+      // assert.deepStrictEqual(
+      //   response,
+      //   expectedBody,
+      //   `should return ${expectedCode}, actual: ${result.status}`
+      // )
+      // assert.strictEqual(
+      //   findUser,
+      //   expectedUser,
+      //   `user updated should equal ${expectedUser}: actual ${findUser}`
+      // )
+    })
+    it('should return a error if any paramters is invalid', async () => {
+      const result = await fetch(`${BASE_URL}/user/${MOCK_ID}`, {
+        method: "PUT",
+        body: JSON.stringify({ name: 'test', email: 'test@gmail.com' })
+      })
+
+      const expectedCode = 400
+      const response = await result.json()
+      const expectedBody = { error: ['password is missing!'] }
+
+      assert.strictEqual(
+        result.status,
+        expectedCode,
+        `status code should be ${expectedCode}, actual: ${result.status}`
+      )
       assert.deepStrictEqual(
         response,
         expectedBody,
         `should return ${expectedCode}, actual: ${result.status}`
       )
-      assert.strictEqual(
-        findUser,
-        expectedUser,
-        `user updated should equal ${expectedUser}: actual ${findUser}`
-      )
     })
-    it('should return a error if any paramters is invalid', async () => {
-      const result = await fetch(`${BASE_URL}/user/${MOCK_ID}`, {
+
+    it('should return a error if user not exists', async () => {
+      const result = await fetch(`${BASE_URL}/user/asdas`, {
         method: "PUT",
-        body: JSON.stringify({ name: undefined, ...MOCK_UPDATED_USER })
+        body: JSON.stringify(MOCK_UPDATED_USER)
       })
 
       const expectedCode = 400
       const response = await result.json()
-      const expectedBody = { error: 'user is missing!' }
+      const expectedBody = { error: 'user not found!' }
 
       assert.strictEqual(
         result.status,

@@ -17,7 +17,7 @@ export class InMemoryStrategy extends ContextStrategy {
     if (id) {
       result = this.db.find(item => item.id === id)
       if (result === undefined) {
-        result = "user not found!"
+        result = false
       }
     } else (
       result = this.db
@@ -29,8 +29,8 @@ export class InMemoryStrategy extends ContextStrategy {
   update(id, data) {
     const findItem = this.find(id)
 
-    if (typeof findItem !== "object") {
-      return findItem
+    if (!findItem) {
+      return false
     }
 
     this.db.splice(this.db[findItem], 1, data)

@@ -19,7 +19,12 @@ export class UpdateUser {
 
     const inMemoryStrategy = new InMemoryStrategy(inMemoryDB)
     const contextStrategy = new ContextStrategy(inMemoryStrategy)
-    await contextStrategy.update(id, user)
+    const updatedUser = await contextStrategy.update(id, user)
+    if (!updatedUser) {
+      response.writeHead(400, DEFAULT_HEADER)
+      response.write(JSON.stringify({ error: 'user not found!' }))
+      return response.end()
+    }
 
     response.writeHead(200, DEFAULT_HEADER)
     response.write(JSON.stringify({ message: 'user updated!' }))
