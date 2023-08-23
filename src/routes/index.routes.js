@@ -1,4 +1,5 @@
 import { CreateUser } from "./createUser.route.js"
+import { UpdateUser } from "./updateUser.route.js"
 import { FindUser } from "./findUser.route.js"
 
 export const DEFAULT_HEADER = {
@@ -31,5 +32,9 @@ export class Routes {
 
   async "/user:get"(request, response) {
     return new FindUser().handler(request, response)
+  }
+
+  async "/user:put"(request, response) {
+    return new UpdateUser().handler(request, response)
   }
 }

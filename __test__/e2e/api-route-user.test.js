@@ -146,6 +146,57 @@ describe("API Suit of Test in route /user", () => {
   })
 
   describe('Suite of test with method POST', () => {
-    it('should update a user by id', async () => { })
+    it('should update a user by id', async () => {
+      const result = await fetch(`${BASE_URL}/user/${MOCK_ID}`, {
+        method: "PUT",
+        body: JSON.stringify(MOCK_UPDATED_USER)
+      })
+
+      const expectedCode = 200
+      const response = await result.json()
+      const expectedBody = { message: "user updated!" }
+      const findUser = await fetch(`${BASE_URL}/user/${MOCK_ID}`, {
+        method: "GET",
+      })
+
+      const expectedUser = { id: MOCK_ID, ...MOCK_UPDATED_USER }
+
+      assert.strictEqual(
+        result.status,
+        expectedCode,
+        `status code should be ${expectedCode}, actual: ${result.status}`
+      )
+      assert.deepStrictEqual(
+        response,
+        expectedBody,
+        `should return ${expectedCode}, actual: ${result.status}`
+      )
+      assert.strictEqual(
+        findUser,
+        expectedUser,
+        `user updated should equal ${expectedUser}: actual ${findUser}`
+      )
+    })
+    it('should return a error if any paramters is invalid', async () => {
+      const result = await fetch(`${BASE_URL}/user/${MOCK_ID}`, {
+        method: "PUT",
+        body: JSON.stringify({ name: undefined, ...MOCK_UPDATED_USER })
+      })
+
+      const expectedCode = 400
+      const response = await result.json()
+      const expectedBody = { error: 'user is missing!' }
+
+      assert.strictEqual(
+        result.status,
+        expectedCode,
+        `status code should be ${expectedCode}, actual: ${result.status}`
+      )
+      assert.deepStrictEqual(
+        response,
+        expectedBody,
+        `should return ${expectedCode}, actual: ${result.status}`
+      )
+    })
   })
 })

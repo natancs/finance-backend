@@ -3,6 +3,7 @@ import { randomUUID } from 'node:crypto'
 export class BaseEntity {
   constructor() {
     this.id = randomUUID()
+
   }
 
   _isValid() {
