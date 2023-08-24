@@ -1,9 +1,9 @@
 import { once } from "node:events"
-import { inMemoryDB } from "../database/inMemoryDB.js"
-import { DEFAULT_HEADER } from "./index.routes.js"
-import { UserEntity } from "../entity/User.js";
-import { ContextStrategy } from "../strategies/context.js";
-import { InMemoryStrategy } from "../strategies/InMemoryStrategy.js";
+import { inMemoryDB } from "../../database/inMemoryDB.js"
+import { DEFAULT_HEADER } from "../index.routes.js"
+import { UserEntity } from "../../entity/User.js";
+import { ContextStrategy } from "../../strategies/context.js";
+import { InMemoryStrategy } from "../../strategies/InMemoryStrategy.js";
 
 export class UpdateUser {
   async handler(request, response) {

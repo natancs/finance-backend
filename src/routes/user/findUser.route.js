@@ -1,7 +1,7 @@
-import { DEFAULT_HEADER } from "./index.routes.js"
-import { inMemoryDB } from "../database/inMemoryDB.js"
-import { ContextStrategy } from "../strategies/context.js";
-import { InMemoryStrategy } from "../strategies/InMemoryStrategy.js";
+import { DEFAULT_HEADER } from "../index.routes.js"
+import { inMemoryDB } from "../../database/inMemoryDB.js"
+import { ContextStrategy } from "../../strategies/context.js";
+import { InMemoryStrategy } from "../../strategies/InMemoryStrategy.js";
 
 export class FindUser {
   async handler(request, response) {

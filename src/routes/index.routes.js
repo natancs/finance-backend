@@ -1,7 +1,7 @@
-import { CreateUser } from "./createUser.route.js"
-import { UpdateUser } from "./updateUser.route.js"
-import { FindUser } from "./findUser.route.js"
-import { DeleteUser } from "./deleteUser.route.js"
+import { CreateUser } from "./user/createUser.route.js"
+import { UpdateUser } from "./user/updateUser.route.js"
+import { FindUser } from "./user/findUser.route.js"
+import { DeleteUser } from "./user/deleteUser.route.js"
 
 export const DEFAULT_HEADER = {
   'Content-Type': 'application/json'

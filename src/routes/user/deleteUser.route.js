@@ -1,7 +1,7 @@
-import { DEFAULT_HEADER } from "./index.routes.js"
-import { inMemoryDB } from "../database/inMemoryDB.js"
-import { ContextStrategy } from "../strategies/context.js";
-import { InMemoryStrategy } from "../strategies/InMemoryStrategy.js";
+import { DEFAULT_HEADER } from "../index.routes.js"
+import { inMemoryDB } from "../../database/inMemoryDB.js"
+import { ContextStrategy } from "../../strategies/context.js";
+import { InMemoryStrategy } from "../../strategies/InMemoryStrategy.js";
 
 export class DeleteUser {
   async handler(request, response) {
@@ -17,7 +17,7 @@ export class DeleteUser {
     }
 
     response.writeHead(200, DEFAULT_HEADER)
-    response.write(JSON.stringify({message: 'user deleted!'}))
+    response.write(JSON.stringify({ message: 'user deleted!' }))
     return response.end()
   }
 }
