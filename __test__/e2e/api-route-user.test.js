@@ -145,7 +145,7 @@ describe("API Suit of Test in route /user", () => {
     })
   })
 
-  describe('Suite of test with method POST', () => {
+  describe('Suite of test with method PUT', () => {
     it('should update a user by id', async () => {
       const result = await fetch(`${BASE_URL}/user/${MOCK_ID}`, {
         method: "PUT",
@@ -209,6 +209,50 @@ describe("API Suit of Test in route /user", () => {
       const expectedCode = 400
       const response = await result.json()
       const expectedBody = { error: 'user not found!' }
+
+      assert.strictEqual(
+        result.status,
+        expectedCode,
+        `status code should be ${expectedCode}, actual: ${result.status}`
+      )
+      assert.deepStrictEqual(
+        response,
+        expectedBody,
+        `should return ${expectedCode}, actual: ${result.status}`
+      )
+    })
+  })
+
+  describe('Suite of test with method DELETE', () => {
+    it('should return a error if user not exists', async () => {
+      const result = await fetch(`${BASE_URL}/user/isiidid`, {
+        method: "DELETE",
+      })
+
+      const expectedCode = 400
+      const response = await result.json()
+      const expectedBody = { error: 'user not found!' }
+
+      assert.strictEqual(
+        result.status,
+        expectedCode,
+        `status code should be ${expectedCode}, actual: ${result.status}`
+      )
+      assert.deepStrictEqual(
+        response,
+        expectedBody,
+        `should return ${expectedCode}, actual: ${result.status}`
+      )
+    })
+
+    it('should remove a user by id', async () => {
+      const result = await fetch(`${BASE_URL}/user/${MOCK_ID}`, {
+        method: "DELETE",
+      })
+
+      const expectedCode = 200
+      const response = await result.json()
+      const expectedBody = {message: 'user deleted!'}
 
       assert.strictEqual(
         result.status,

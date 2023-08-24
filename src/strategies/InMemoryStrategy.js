@@ -37,4 +37,16 @@ export class InMemoryStrategy extends ContextStrategy {
 
     return true
   }
+
+  delete(id) {
+    const findItem = this.find(id)
+
+    if (!findItem) {
+      return false
+    }
+
+    this.db.splice(this.db[findItem], 1)
+
+    return true
+  }
 }

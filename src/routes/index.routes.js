@@ -1,6 +1,7 @@
 import { CreateUser } from "./createUser.route.js"
 import { UpdateUser } from "./updateUser.route.js"
 import { FindUser } from "./findUser.route.js"
+import { DeleteUser } from "./deleteUser.route.js"
 
 export const DEFAULT_HEADER = {
   'Content-Type': 'application/json'
@@ -36,5 +37,9 @@ export class Routes {
 
   async "/user:put"(request, response) {
     return new UpdateUser().handler(request, response)
+  }
+
+  async "/user:delete"(request, response) {
+    return new DeleteUser().handler(request, response)
   }
 }
