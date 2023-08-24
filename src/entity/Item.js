@@ -14,10 +14,3 @@ export class Item extends BaseEntity {
     }
   }
 }
-
-// - id
-//     - name
-//     - description
-//     - price
-//     - type
-//     - userId

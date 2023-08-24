@@ -2,7 +2,7 @@ import { describe, it, before, after } from "node:test"
 import assert from "node:assert"
 import { app } from "../../src/server.js"
 
-describe("API Suit of Test in route /user", () => {
+describe("API Suite of Test in route /user", () => {
   let BASE_URL = ''
   let _server = {}
   let MOCK_ID = ''
@@ -252,7 +252,7 @@ describe("API Suit of Test in route /user", () => {
 
       const expectedCode = 200
       const response = await result.json()
-      const expectedBody = {message: 'user deleted!'}
+      const expectedBody = { message: 'user deleted!' }
 
       assert.strictEqual(
         result.status,
