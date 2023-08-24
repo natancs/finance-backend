@@ -1,0 +1,17 @@
+Routes
+  - users
+  - items
+
+Entities
+  - users
+    - id
+    - name
+    - email
+    - password
+  - items
+    - id
+    - name
+    - description
+    - price
+    - type
+    - userId
