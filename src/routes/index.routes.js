@@ -2,6 +2,7 @@ import { CreateUser } from "./user/createUser.route.js"
 import { UpdateUser } from "./user/updateUser.route.js"
 import { FindUser } from "./user/findUser.route.js"
 import { DeleteUser } from "./user/deleteUser.route.js"
+import { AuthRoute } from "./auth.routes.js"
 
 export const DEFAULT_HEADER = {
   'Content-Type': 'application/json'
@@ -25,6 +26,10 @@ export class Routes {
     response.writeHead(200, DEFAULT_HEADER)
     response.write(JSON.stringify({ ping: "pong" }))
     return response.end()
+  }
+
+  async "/login:post"(request, response) {
+    return new AuthRoute().handler(request, response)
   }
 
   async "/user:post"(request, response) {

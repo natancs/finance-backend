@@ -1,9 +1,16 @@
 import { describe, before, it, after } from 'node:test'
+import assert from 'node:assert'
 import { app } from '../../src/server.js'
 
 describe("API Suite of test in route /login", () => {
   let BASE_URL = ''
   let _server = {}
+  const MOCK_USER = {
+    name: "natanael",
+    email: "natan@gmail.com",
+    password: "teste"
+  }
+  let MOCK_ID = ''
 
   before(async () => {
     _server = app
@@ -19,5 +26,42 @@ describe("API Suite of test in route /login", () => {
     })
   })
 
+  before(async () => {
+    const request = await fetch(`${BASE_URL}/user`, {
+      method: 'POST',
+      body: JSON.stringify(MOCK_USER)
+    })
+
+    const response = await request.json()
+    MOCK_ID = response.id
+  })
+
   after((done) => _server.close(done))
+
+  it('sould return the token jwt if authenticated in route /login', async () => {
+    const input = {
+      email: MOCK_USER.email,
+      password: MOCK_USER.password
+    }
+    const result = await fetch(`${BASE_URL}/login`, {
+      method: 'POST',
+      body: JSON.stringify(input)
+    })
+
+    const expectedCode = 200
+    const response = await result.json()
+    const expectedBody = { id: MOCK_ID, token: response.token }
+
+    assert.strictEqual(
+      result.status,
+      expectedCode,
+      `Expected status code ${expectedCode} but got ${result.status}`
+    )
+    assert.strictEqual(
+      response,
+      expectedBody,
+      `Expected response body ${expectedBody} but got ${response}`
+    )
+
+  })
 })
