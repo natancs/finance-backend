@@ -11,11 +11,11 @@ export class InMemoryStrategy extends ContextStrategy {
     return data
   }
 
-  find(id) {
+  find(where) {
     let result = ''
 
-    if (id) {
-      result = this.db.find(item => item.id === id)
+    if (where) {
+      result = this.db.find(item => item.id === where || item.email === where || item.name === where)
       if (result === undefined) {
         result = false
       }

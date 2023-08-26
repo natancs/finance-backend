@@ -1,6 +1,6 @@
 import { describe, before, it, after } from 'node:test'
 import assert from 'node:assert'
-import { app } from '../../src/server.js'
+import { app } from './server.js'
 
 describe("API Suite of test in route /login", () => {
   let BASE_URL = ''
