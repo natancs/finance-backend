@@ -87,7 +87,7 @@ describe("API Suite of Test in route /user", () => {
       })
       const expectedCode = 400
       const response = await result.json()
-      const expectedBody = { error: ["name is missing!"] }
+      const expectedBody = { error: "name is missing!" }
 
       assert.strictEqual(
         result.status,
@@ -220,7 +220,7 @@ describe("API Suite of Test in route /user", () => {
 
       const expectedCode = 400
       const response = await result.json()
-      const expectedBody = { error: ['password is missing!'] }
+      const expectedBody = { error: 'password is missing!' }
 
       assert.strictEqual(
         result.status,

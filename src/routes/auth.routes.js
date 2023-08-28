@@ -10,27 +10,29 @@ export class AuthRoute {
     this.repository = new ContextStrategy(new InMemoryStrategy(inMemoryDB))
   }
   async handler(request, response) {
-    const { email, password } = JSON.parse(await once(request, 'data'))
-    const user = await this.repository.find(email)
+    try {
+      const { email, password } = JSON.parse(await once(request, 'data'))
+      const user = await this.repository.find(email)
 
-    if (!user) {
+      if (!user) {
+        throw new Error("user not found!")
+      }
+
+      if (user.email !== email || user.password !== password) {
+        throw new Error("email or password invalid!")
+      }
+
+      const token = jwt.sign({ id: user.id }, secretKey, {
+        expiresIn: "7d"
+      })
+
+      response.writeHead(200, DEFAULT_HEADER)
+      response.write(JSON.stringify({ id: user.id, token }))
+      return response.end()
+    } catch (error) {
       response.writeHead(400, DEFAULT_HEADER)
-      response.write(JSON.stringify({ error: "user not found!" }))
+      response.write(JSON.stringify({ error: error.message }))
       return response.end()
     }
-
-    if (user.email !== email || user.password !== password) {
-      response.writeHead(400, DEFAULT_HEADER)
-      response.write(JSON.stringify({ error: "email or password invalid!" }))
-      return response.end()
-    }
-
-    const token = jwt.sign({ id: user.id }, secretKey, {
-      expiresIn: "7d"
-    })
-
-    response.writeHead(200, DEFAULT_HEADER)
-    response.write(JSON.stringify({ id: user.id, token }))
-    return response.end()
   }
 }
