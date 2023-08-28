@@ -7,6 +7,7 @@ import { AuthRoute } from "./auth.routes.js"
 export const DEFAULT_HEADER = {
   'Content-Type': 'application/json'
 }
+export const secretKey = "0d13cfc865168a5410821988410eebe3"
 
 export class Routes {
   static async main(request, response) {

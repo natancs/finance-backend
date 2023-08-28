@@ -1,6 +1,6 @@
 import { describe, before, it, after } from 'node:test'
 import assert from 'node:assert'
-import { app } from './server.js'
+import { app } from '../../src/server.js'
 
 describe("API Suite of test in route /login", () => {
   let BASE_URL = ''
@@ -57,11 +57,62 @@ describe("API Suite of test in route /login", () => {
       expectedCode,
       `Expected status code ${expectedCode} but got ${result.status}`
     )
-    assert.strictEqual(
+    assert.deepStrictEqual(
       response,
       expectedBody,
       `Expected response body ${expectedBody} but got ${response}`
     )
+  })
 
+  it('sould return a error if user not exists', async () => {
+    const input = {
+      email: "MOCK_USER.email",
+      password: MOCK_USER.password
+    }
+    const result = await fetch(`${BASE_URL}/login`, {
+      method: 'POST',
+      body: JSON.stringify(input)
+    })
+
+    const expectedCode = 400
+    const response = await result.json()
+    const expectedBody = { error: "user not found!" }
+
+    assert.strictEqual(
+      result.status,
+      expectedCode,
+      `Expected status code ${expectedCode} but got ${result.status}`
+    )
+    assert.deepStrictEqual(
+      response,
+      expectedBody,
+      `Expected response body ${expectedBody} but got ${response}`
+    )
+  })
+
+  it('sould return a error if email or password invalid', async () => {
+    const input = {
+      email: MOCK_USER.email,
+      password: "invalid"
+    }
+    const result = await fetch(`${BASE_URL}/login`, {
+      method: 'POST',
+      body: JSON.stringify(input)
+    })
+
+    const expectedCode = 400
+    const response = await result.json()
+    const expectedBody = { error: "email or password invalid!" }
+
+    assert.strictEqual(
+      result.status,
+      expectedCode,
+      `Expected status code ${expectedCode} but got ${result.status}`
+    )
+    assert.deepStrictEqual(
+      response,
+      expectedBody,
+      `Expected response body ${expectedBody} but got ${response}`
+    )
   })
 })

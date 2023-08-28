@@ -12,6 +12,8 @@ describe("API Suite of Test in route /user", () => {
     password: "<PASSWORD>"
   }
 
+  let token = ""
+
   before(async () => {
     _server = app
     _server.listen()
@@ -25,12 +27,28 @@ describe("API Suite of Test in route /user", () => {
     })
   })
 
+  before(async () => {
+    const input = {
+      name: "natanael",
+      email: "natan@gmail.com",
+      password: "teste"
+    }
+
+    const result = await fetch(`${BASE_URL}/user`, {
+      method: "POST",
+      body: JSON.stringify(input)
+    })
+    const response = await result.json()
+    token = response.token
+    MOCK_ID = response.id
+  })
+
   after((done) => {
     _server.close(done)
   })
 
   describe('Suite of test with method POST', () => {
-    it('should create a user and return message and id', async () => {
+    it('should create a user and return message and id and token', async () => {
       const input = {
         name: "natanael",
         email: "natan@gmail.com",
@@ -43,8 +61,7 @@ describe("API Suite of Test in route /user", () => {
       })
       const expectedCode = 201
       const response = await result.json()
-      const expectedBody = { message: "User created!", id: response.id }
-      MOCK_ID = response.id
+      const expectedBody = { message: "User created!", id: response.id, token: response.token }
 
       assert.strictEqual(
         result.status,
@@ -89,6 +106,9 @@ describe("API Suite of Test in route /user", () => {
     it('should find all users', async () => {
       const result = await fetch(`${BASE_URL}/user`, {
         method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
       })
       const expectedCode = 200
       const response = await result.json()
@@ -107,6 +127,9 @@ describe("API Suite of Test in route /user", () => {
     it('should find user by id', async () => {
       const result = await fetch(`${BASE_URL}/user/${MOCK_ID}`, {
         method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        },
       })
       const expectedCode = 200
       const response = await result.json()
@@ -127,6 +150,9 @@ describe("API Suite of Test in route /user", () => {
     it('should return a error if id not exists', async () => {
       const result = await fetch(`${BASE_URL}/user/2`, {
         method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        },
       })
       const expectedCode = 400
       const response = await result.json()
@@ -149,7 +175,10 @@ describe("API Suite of Test in route /user", () => {
     it('should update a user by id', async () => {
       const result = await fetch(`${BASE_URL}/user/${MOCK_ID}`, {
         method: "PUT",
-        body: JSON.stringify(MOCK_UPDATED_USER)
+        headers: {
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(MOCK_UPDATED_USER),
       })
 
       const expectedCode = 200
@@ -157,6 +186,9 @@ describe("API Suite of Test in route /user", () => {
       const expectedBody = { message: "user updated!" }
       const resultFindUser = await fetch(`${BASE_URL}/user/${MOCK_ID}`, {
         method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
       })
       const findUser = await resultFindUser.json()
 
@@ -181,7 +213,9 @@ describe("API Suite of Test in route /user", () => {
     it('should return a error if any paramters is invalid', async () => {
       const result = await fetch(`${BASE_URL}/user/${MOCK_ID}`, {
         method: "PUT",
-        body: JSON.stringify({ name: 'test', email: 'test@gmail.com' })
+        body: JSON.stringify({ name: 'test', email: 'test@gmail.com' }), headers: {
+          "Authorization": `Bearer ${token}`
+        },
       })
 
       const expectedCode = 400
@@ -203,6 +237,9 @@ describe("API Suite of Test in route /user", () => {
     it('should return a error if user not exists', async () => {
       const result = await fetch(`${BASE_URL}/user/asdas`, {
         method: "PUT",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        },
         body: JSON.stringify(MOCK_UPDATED_USER)
       })
 
@@ -227,6 +264,9 @@ describe("API Suite of Test in route /user", () => {
     it('should return a error if user not exists', async () => {
       const result = await fetch(`${BASE_URL}/user/isiidid`, {
         method: "DELETE",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        },
       })
 
       const expectedCode = 400
@@ -248,6 +288,9 @@ describe("API Suite of Test in route /user", () => {
     it('should remove a user by id', async () => {
       const result = await fetch(`${BASE_URL}/user/${MOCK_ID}`, {
         method: "DELETE",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        },
       })
 
       const expectedCode = 200

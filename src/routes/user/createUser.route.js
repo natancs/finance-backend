@@ -1,6 +1,7 @@
 import { once } from "node:events"
+import jwt from 'jsonwebtoken'
 import { inMemoryDB } from "../../database/inMemoryDB.js"
-import { DEFAULT_HEADER } from "../index.routes.js"
+import { DEFAULT_HEADER, secretKey } from "../index.routes.js"
 import { UserEntity } from "../../entity/User.js";
 import { ContextStrategy } from "../../strategies/context.js";
 import { InMemoryStrategy } from "../../strategies/InMemoryStrategy.js";
@@ -19,9 +20,12 @@ export class CreateUser {
     const inMemoryStrategy = new InMemoryStrategy(inMemoryDB)
     const contextStrategy = new ContextStrategy(inMemoryStrategy)
     await contextStrategy.create(user)
+    const token = jwt.sign({ id: user.id }, secretKey, {
+      expiresIn: "7d"
+    })
 
     response.writeHead(201, DEFAULT_HEADER)
-    response.write(JSON.stringify({ message: "User created!", id: user.id }))
+    response.write(JSON.stringify({ message: "User created!", id: user.id, token }))
     return response.end()
   }
 }
