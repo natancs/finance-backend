@@ -1,6 +1,6 @@
 import { describe, it, before, after } from "node:test"
 import assert from "node:assert"
-import { app } from "../../src/server.js"
+import { server } from "../../src/server.js"
 
 describe("API Suite of Test in route /user", () => {
   let BASE_URL = ''
@@ -15,11 +15,11 @@ describe("API Suite of Test in route /user", () => {
   let token = ""
 
   before(async () => {
-    _server = app
+    _server = server
     _server.listen()
     await new Promise((resolve, reject) => {
       _server.once('listening', () => {
-        const { port } = _server.address
+        const { port } = _server.address()
         BASE_URL = `http://localhost:${port}`
         console.log('e2e rodando na ', BASE_URL)
         resolve()
@@ -124,28 +124,28 @@ describe("API Suite of Test in route /user", () => {
       )
     })
 
-    // it('should find user by id', async () => {
-    //   const result = await fetch(`${BASE_URL}/user/${MOCK_ID}`, {
-    //     method: "GET",
-    //     headers: {
-    //       "Authorization": `Bearer ${token}`
-    //     },
-    //   })
-    //   const expectedCode = 200
-    //   const response = await result.json()
-    //   const expectedBody = { id: MOCK_ID, ...response }
+    it('should find user by id', async () => {
+      const result = await fetch(`${BASE_URL}/user/${MOCK_ID}`, {
+        method: "GET",
+        // headers: {
+        //   "Authorization": `Bearer ${token}`
+        // },
+      })
+      const expectedCode = 200
+      const response = await result.json()
+      const expectedBody = { id: MOCK_ID, ...response }
 
-    //   assert.strictEqual(
-    //     result.status,
-    //     expectedCode,
-    //     `status code should be ${expectedCode}, actual: ${result.status}`
-    //   )
-    //   assert.deepStrictEqual(
-    //     response,
-    //     expectedBody,
-    //     `should return ${expectedCode}, actual: ${result.status}`
-    //   )
-    // })
+      assert.strictEqual(
+        result.status,
+        expectedCode,
+        `status code should be ${expectedCode}, actual: ${result.status}`
+      )
+      assert.deepStrictEqual(
+        response,
+        expectedBody,
+        `should return ${expectedCode}, actual: ${result.status}`
+      )
+    })
 
     // it('should return a error if id not exists', async () => {
     //   const result = await fetch(`${BASE_URL}/user/2`, {

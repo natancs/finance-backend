@@ -15,6 +15,6 @@ app.get("/user", async (request, response) => {
   new FindUser().handler(request, response).catch(hadlerError(response))
 })
 
-app.createServer()
+const server = app.createServer()
 
-export { app }
+export { server }

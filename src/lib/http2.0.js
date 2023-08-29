@@ -42,8 +42,6 @@ class MyHTTP {
 
   createServer() {
     const server = http.createServer(this.handleRequest.bind(this));
-    this.address = server.address()
-    console.log(server)
     return server
   }
 
