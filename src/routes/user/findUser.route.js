@@ -10,13 +10,13 @@ export class FindUser {
     const inMemoryStrategy = new InMemoryStrategy(inMemoryDB)
     const contextStrategy = new ContextStrategy(inMemoryStrategy)
     const findUser = await contextStrategy.find(id)
-    const tokenValid = authValidate(request)
+    // const tokenValid = authValidate(request)
 
-    if (!tokenValid.isValid) {
-      response.writeHead(400, DEFAULT_HEADER)
-      response.write(JSON.stringify({ error: tokenValid.message }))
-      return response.end()
-    }
+    // if (!tokenValid.isValid) {
+    //   response.writeHead(400, DEFAULT_HEADER)
+    //   response.write(JSON.stringify({ error: tokenValid.message }))
+    //   return response.end()
+    // }
 
     if (!findUser) {
       response.writeHead(400, DEFAULT_HEADER)

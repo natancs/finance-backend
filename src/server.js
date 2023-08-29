@@ -1,5 +1,7 @@
-import { createServer } from "node:http"
-import { DEFAULT_HEADER, Routes } from "./routes/index.routes.js"
+import http20 from "./lib/http2.0.js"
+import { FindUser } from "./routes/user/findUser.route.js"
+
+const app = http20()
 
 function hadlerError(response) {
   return error => {
@@ -9,10 +11,10 @@ function hadlerError(response) {
   }
 }
 
-function handler(request, response) {
-  Routes.main(request, response).catch(hadlerError(response))
-}
+app.get("/user", async (request, response) => {
+  new FindUser().handler(request, response).catch(hadlerError(response))
+})
 
-const app = createServer(handler)
+app.createServer()
 
 export { app }
