@@ -4,10 +4,15 @@ import url from 'url'
 class MyHTTP {
   constructor() {
     this.routes = {};
+    this.method = {}
   }
 
   get(path, handler) {
-    this.routes[path] = handler;
+    this.routes[`${path}:get`] = handler;
+  }
+
+  post(path, handler) {
+    this.routes[`${path}:post`] = handler
   }
 
   use(middleware) {
@@ -18,8 +23,10 @@ class MyHTTP {
     try {
       const parsedUrl = url.parse(request.url, true);
       const { pathname } = parsedUrl;
+      const { method } = request
 
-      const handler = this.routes[pathname];
+      const handler = this.routes[`${pathname}:${method.toLowerCase()}`];
+
       if (!handler) {
         response.statusCode = 404;
         response.end('Not Found');
