@@ -1,45 +1,69 @@
-import http from 'http'
-import url from 'url'
+import http from 'node:http'
+import url from 'node:url'
 
 class MyHTTP {
   constructor() {
-    this.routes = {};
-    this.method = {}
+    this.routes = []
+    this.middlewares = []
   }
 
   get(path, handler) {
-    this.routes[`${path}:get`] = handler;
+    this.routes.push({
+      method: "GET",
+      path,
+      handler
+    })
   }
 
   post(path, handler) {
-    this.routes[`${path}:post`] = handler
+    this.routes.push({
+      method: 'POST',
+      path,
+      handler
+    })
   }
 
   use(middleware) {
-    this.middleware = middleware;
+    this.middlewares.push(middleware)
   }
 
-  async handleRequest(request, response) {
+
+  handleRequest(request, response) {
     try {
       const parsedUrl = url.parse(request.url, true);
-      const { pathname } = parsedUrl;
+      const { pathname, query } = parsedUrl;
       const { method } = request
 
-      const handler = this.routes[`${pathname}:${method.toLowerCase()}`];
+      const matchingRoutes = this.routes.filter(route => {
+        const pathRegex = new RegExp(`^${route.path.replace(/:\w+/g, '([\\w-]+)')}$`)
+        return route.method === method && pathRegex.test(pathname)
+      })
 
-      if (!handler) {
-        response.statusCode = 404;
-        response.end('Not Found');
-        return;
+      if (matchingRoutes.length === 0) {
+        response.statusCode = 404
+        return response.end('Not Found!')
       }
 
-      if (this.middleware) {
-        this.middleware(request, response, () => {
-          handler(request, response);
-        });
-      } else {
-        handler(request, response);
+      request.params = {}
+      const route = matchingRoutes[0]
+      const paramNames = route.path.match(/:\w+/g) || []
+      const matches = pathname.match(new RegExp(route.path.replace(/:\w+/g, '([\\w-]+)')))
+      paramNames.forEach((param, index) => {
+        request.params[param.substring(1)] = matches[index + 1]
+      })
+
+      request.query = query
+
+      const next = () => {
+        const middleware = this.middlewares.shift()
+        if (middleware) {
+          middleware(request, response, next)
+        } else {
+          route.handler(request, response)
+        }
       }
+
+      next()
     } catch (error) {
       console.log("Error", error)
       response.statusCode = 500

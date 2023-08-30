@@ -12,11 +12,16 @@ function hadlerError(response) {
   }
 }
 
+
 app.post("/user", async (request, response) => {
   new CreateUser().handler(request, response).catch(hadlerError(response))
 })
 
 app.get("/user", async (request, response) => {
+  new FindUser().handler(request, response).catch(hadlerError(response))
+})
+
+app.get("/user/:id", async (request, response) => {
   new FindUser().handler(request, response).catch(hadlerError(response))
 })
 

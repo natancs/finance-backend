@@ -124,51 +124,51 @@ describe("API Suite of Test in route /user", () => {
       )
     })
 
-    // it('should find user by id', async () => {
-    //   const result = await fetch(`${BASE_URL}/user/${MOCK_ID}`, {
-    //     method: "GET",
-    //     headers: {
-    //       "Authorization": `Bearer ${token}`
-    //     },
-    //   })
-    //   const expectedCode = 200
-    //   const response = await result.json()
-    //   const expectedBody = { id: MOCK_ID, ...response }
+    it('should find user by id', async () => {
+      const result = await fetch(`${BASE_URL}/user/${MOCK_ID}`, {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        },
+      })
+      const expectedCode = 200
+      const response = await result.json()
+      const expectedBody = { id: MOCK_ID, ...response }
 
-    //   assert.strictEqual(
-    //     result.status,
-    //     expectedCode,
-    //     `status code should be ${expectedCode}, actual: ${result.status}`
-    //   )
-    //   assert.deepStrictEqual(
-    //     response,
-    //     expectedBody,
-    //     `should return ${expectedCode}, actual: ${result.status}`
-    //   )
-    // })
+      assert.strictEqual(
+        result.status,
+        expectedCode,
+        `status code should be ${expectedCode}, actual: ${result.status}`
+      )
+      assert.deepStrictEqual(
+        response,
+        expectedBody,
+        `should return ${expectedCode}, actual: ${result.status}`
+      )
+    })
 
-    // it('should return a error if id not exists', async () => {
-    //   const result = await fetch(`${BASE_URL}/user/2`, {
-    //     method: "GET",
-    //     headers: {
-    //       "Authorization": `Bearer ${token}`
-    //     },
-    //   })
-    //   const expectedCode = 400
-    //   const response = await result.json()
-    //   const expectedBody = { error: "user not found!" }
+    it('should return a error if id not exists', async () => {
+      const result = await fetch(`${BASE_URL}/user/2`, {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        },
+      })
+      const expectedCode = 400
+      const response = await result.json()
+      const expectedBody = { error: "user not found!" }
 
-    //   assert.strictEqual(
-    //     result.status,
-    //     expectedCode,
-    //     `status code should be ${expectedCode}, actual: ${result.status}`
-    //   )
-    //   assert.deepStrictEqual(
-    //     response,
-    //     expectedBody,
-    //     `should return ${expectedCode}, actual: ${result.status}`
-    //   )
-    // })
+      assert.strictEqual(
+        result.status,
+        expectedCode,
+        `status code should be ${expectedCode}, actual: ${result.status}`
+      )
+      assert.deepStrictEqual(
+        response,
+        expectedBody,
+        `should return ${expectedCode}, actual: ${result.status}`
+      )
+    })
   })
 
   // describe('Suite of test with method PUT', () => {
