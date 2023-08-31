@@ -1,20 +1,23 @@
-import http from "../../lib/http2.0.js"
+import { CreateUser } from './createUser.route.js'
+import { FindUser } from './findUser.route.js'
+import { UpdateUser } from './updateUser.route.js'
+import { DeleteUser } from './deleteUser.route.js'
 
-function routesUser(request, response) {
-  const routeUser = http()
+function userRoutes(app) {
+  app.post("/user", async (request, response) => new CreateUser().handler(request, response))
 
-  routeUser.post("/user", new CreateUser().handler(request, response))
+  app.get("/user", async (request, response) => new FindUser().handler(request, response))
 
-  routeUser.get("/user", new FindUser().handler(request, response))
+  app.get("/user/:id", async (request, response) => new FindUser().handler(request, response))
 
-  routeUser.get("/user/:id", new FindUser().handler(request, response))
+  app.put("/user/:id", async (request, response) => new UpdateUser().handler(request, response))
 
-  routeUser.put("/user/:id", new UpdateUser().handler(request, response))
+  app.delete("/user/:id", async (request, response) => new DeleteUser().handler(request, response))
 
-  routeUser.delete("/user/:id", new DeleteUser().handler(request, response))
+  app.post("/login", async (request, response) => new AuthRoute().handler(request, response))
 
-  routeUser.post("/login", new AuthRoute().handler(request, response))
+  return app
 }
 
 
-export { routesUser }
+export { userRoutes }
