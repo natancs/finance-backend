@@ -14,8 +14,6 @@ function userRoutes(app) {
 
   app.delete("/user/:id", async (request, response) => new DeleteUser().handler(request, response))
 
-  app.post("/login", async (request, response) => new AuthRoute().handler(request, response))
-
   return app
 }
 

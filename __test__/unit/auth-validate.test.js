@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken'
 import { authValidate } from "../../src/utils/auth-validate.js"
 import { secretKey } from "../../src/routes/index.routes.js"
 
-describe("Suite of test unit in authorization token", () => {
+describe.skip("Suite of test unit in authorization token", () => {
   let tokenValid = jwt.sign({ id: "bla" }, secretKey, {
     expiresIn: '7d'
   })

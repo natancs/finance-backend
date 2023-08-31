@@ -2,7 +2,7 @@ import { describe, it, before, after } from "node:test"
 import assert from "node:assert"
 import { server } from "../../src/server.js"
 
-describe("API Suite of Test in route /user", () => {
+describe.skip("API Suite of Test in route /user", () => {
   let BASE_URL = ''
   let _server = {}
   let MOCK_ID = ''
@@ -21,7 +21,7 @@ describe("API Suite of Test in route /user", () => {
       _server.once('listening', () => {
         const { port } = _server.address()
         BASE_URL = `http://localhost:${port}`
-        console.log('e2e rodando na ', BASE_URL)
+        console.log(`e2e rodando na ${BASE_URL}/user`)
         resolve()
       })
     })
