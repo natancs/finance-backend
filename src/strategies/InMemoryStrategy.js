@@ -6,6 +6,14 @@ export class InMemoryStrategy extends ContextStrategy {
     this.db = db
   }
 
+  #findKeyForValue(object, value) {
+    for (let key in object) {
+      if (object[key] === value) return key
+    }
+
+    return null
+  }
+
   create(data) {
     this.db.push(data)
     return data
@@ -15,7 +23,7 @@ export class InMemoryStrategy extends ContextStrategy {
     let result = ''
 
     if (where) {
-      result = this.db.find(item => item.id === where || item.email === where || item.name === where)
+      result = this.db.find(item => item[this.#findKeyForValue(item, where)] === where)
       if (result === undefined) {
         result = false
       }

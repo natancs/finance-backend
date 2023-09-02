@@ -16,6 +16,10 @@ export class CreateItem {
       const userId = request.userId
       const data = JSON.parse(await once(request, 'data'))
       const item = new Item({ ...data, userId })
+
+      if (!item._isValid().valid) {
+        throw new Error(item._isValid().error)
+      }
       await this.contextStrategy.create(item)
 
       response.writeHead(200, DEFAULT_HEADER)

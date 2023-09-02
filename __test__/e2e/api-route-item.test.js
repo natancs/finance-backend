@@ -74,32 +74,36 @@ describe(
         )
       })
 
-      // it('should return a error if any paramters not passed', async () => {
-      //   const input = {
-      //     description: "pão",
-      //     price: 5,
-      //     type: "alimento",
-      //   }
+      it('should return a error if any paramters not passed', async () => {
+        const input = {
+          description: "pão",
+          price: 5,
+          type: "alimento",
+          userId: USER_ID
+        }
 
-      //   const result = await fetch(`${BASE_URL}/user/${USER_ID}/item`, {
-      //     method: "POST",
-      //     body: JSON.stringify(input)
-      //   })
-      //   const expectedCode = 400
-      //   const response = await result.json()
-      //   const expectedBody = { error: ["name is missing!"] }
+        const result = await fetch(`${BASE_URL}/item`, {
+          method: "POST",
+          body: JSON.stringify(input),
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        })
+        const expectedCode = 400
+        const response = await result.json()
+        const expectedBody = { error: "name is missing!" }
 
-      //   assert.strictEqual(
-      //     result.status,
-      //     expectedCode,
-      //     `status code should be ${expectedCode}, actual: ${result.status}`
-      //   )
-      //   assert.deepStrictEqual(
-      //     response,
-      //     expectedBody,
-      //     `should return ${expectedCode}, actual: ${result.status}`
-      //   )
-      // })
+        assert.strictEqual(
+          result.status,
+          expectedCode,
+          `status code should be ${expectedCode}, actual: ${result.status}`
+        )
+        assert.deepStrictEqual(
+          response,
+          expectedBody,
+          `should return ${expectedCode}, actual: ${result.status}`
+        )
+      })
 
       // it('should return a error if any paramters not passed', async () => {
       //   const input = {
