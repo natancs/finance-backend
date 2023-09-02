@@ -43,6 +43,17 @@ class MyHTTP {
     this.middlewares.push(middleware)
   }
 
+  next(index, request, response, route) {
+    if (index < this.middlewares.length) {
+      const middleware = this.middlewares[index]
+      middleware(request, response, () => {
+        next(index + 1, request, response, route)
+      }).catch(this.handlerError(response))
+    } else {
+      route.handler(request, response).catch(this.handlerError(response))
+    }
+  }
+
   handlerError(response) {
     return error => {
       console.log("Error", error)
@@ -76,27 +87,7 @@ class MyHTTP {
 
     request.query = query
 
-    // const next = () => {
-    //   const middleware = this.middlewares.shift()
-    //   if (middleware) {
-    //     middleware(request, response, next).catch(this.handlerError(response))
-    //   } else {
-    //     route.handler(request, response).catch(this.handlerError(response))
-    //   }
-    // }
-
-    const next = (index) => {
-      if (index < this.middlewares.length) {
-        const middleware = this.middlewares[index]
-        middleware(request, response, () => {
-          next(index + 1)
-        }).catch(this.handlerError(response))
-      } else {
-        route.handler(request, response).catch(this.handlerError(response))
-      }
-    }
-
-    next(0)
+    this.next(0, request, response, route)
   }
 
   createServer() {

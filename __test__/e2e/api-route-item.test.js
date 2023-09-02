@@ -7,7 +7,8 @@ describe(
   () => {
     let BASE_URL = ''
     let _server = {}
-    const USER_ID = ''
+    let USER_ID = ''
+    let token
 
     before(async () => {
       _server = server
@@ -35,25 +36,31 @@ describe(
 
       const response = await result.json()
       USER_ID = response.id
+      token = response.token
     })
 
     after((done) => _server.close(done))
 
     describe('Suite of test with method POST', () => {
-      it('should a error if user id is invalid', async () => {
+      it('should create a new item ande return a message', async () => {
         const input = {
-          name: "natanael",
-          email: "natan@gmail.com",
-          password: "teste"
+          name: "pão",
+          description: "pão",
+          price: 5,
+          type: "alimento",
+          userId: USER_ID
         }
 
-        const result = await fetch(`${BASE_URL}/user/sdasd/item`, {
+        const result = await fetch(`${BASE_URL}/item`, {
           method: "POST",
-          body: JSON.stringify(input)
+          body: JSON.stringify(input),
+          headers: {
+            "Authorization": `Bearer ${token}`
+          },
         })
-        const expectedCode = 201
+        const expectedCode = 200
         const response = await result.json()
-        const expectedBody = { message: "User created!", id: response.id, token: response.token }
+        const expectedBody = { message: "new item created!" }
 
         assert.strictEqual(
           result.status,
@@ -66,6 +73,33 @@ describe(
           `should return ${expectedCode}, actual: ${result.status}`
         )
       })
+
+      // it('should return a error if any paramters not passed', async () => {
+      //   const input = {
+      //     description: "pão",
+      //     price: 5,
+      //     type: "alimento",
+      //   }
+
+      //   const result = await fetch(`${BASE_URL}/user/${USER_ID}/item`, {
+      //     method: "POST",
+      //     body: JSON.stringify(input)
+      //   })
+      //   const expectedCode = 400
+      //   const response = await result.json()
+      //   const expectedBody = { error: ["name is missing!"] }
+
+      //   assert.strictEqual(
+      //     result.status,
+      //     expectedCode,
+      //     `status code should be ${expectedCode}, actual: ${result.status}`
+      //   )
+      //   assert.deepStrictEqual(
+      //     response,
+      //     expectedBody,
+      //     `should return ${expectedCode}, actual: ${result.status}`
+      //   )
+      // })
 
       // it('should return a error if any paramters not passed', async () => {
       //   const input = {
