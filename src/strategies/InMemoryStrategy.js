@@ -19,7 +19,7 @@ export class InMemoryStrategy extends ContextStrategy {
     return data
   }
 
-  find(where) {
+  find({where}) {
     let result = ''
 
     if (where) {
