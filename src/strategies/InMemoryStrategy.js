@@ -23,8 +23,9 @@ export class InMemoryStrategy extends ContextStrategy {
     let result = ''
 
     if (where) {
-      result = this.db.find(item => item[this.#findKeyForValue(item, where)] === where)
-      if (result === undefined) {
+      result = this.db.filter(item => item[this.#findKeyForValue(item, where)] === where)
+      if (result.length === 1) result = result[0]
+      if (result.length === 0) {
         result = false
       }
     } else (

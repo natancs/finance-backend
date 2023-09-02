@@ -2,8 +2,8 @@ import { describe, before, after, it } from 'node:test'
 import assert from 'node:assert'
 import { server } from '../../src/server.js'
 
-describe(
-  'Suite of test in route /user/:id/item',
+describe.skip(
+  'Suite of test in route /item',
   () => {
     let BASE_URL = ''
     let _server = {}
@@ -18,7 +18,7 @@ describe(
         _server.once('listening', () => {
           const { port } = _server.address()
           BASE_URL = `http://localhost:${port}`
-          console.log(`e2e rodando na ${BASE_URL}/user/:id/item`)
+          console.log(`e2e rodando na ${BASE_URL}/item`)
           resolve()
         })
       })

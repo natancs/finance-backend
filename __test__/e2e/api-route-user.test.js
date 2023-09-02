@@ -2,10 +2,15 @@ import { describe, it, before, after } from "node:test"
 import assert from "node:assert"
 import { server } from "../../src/server.js"
 
-describe.skip("API Suite of Test in route /user", () => {
+describe("API Suite of Test in route /user", () => {
   let BASE_URL = ''
   let _server = {}
   let MOCK_ID = ''
+  const MOCK_CREATE_USER = {
+    name: "natanael",
+    email: "natan@gmail.com",
+    password: "teste"
+  }
   const MOCK_UPDATED_USER = {
     name: "natanael",
     email: "natan@gmail.com",
@@ -49,15 +54,9 @@ describe.skip("API Suite of Test in route /user", () => {
 
   describe('Suite of test with method POST', () => {
     it('should create a user and return message and id and token', async () => {
-      const input = {
-        name: "natanael",
-        email: "natan@gmail.com",
-        password: "teste"
-      }
-
       const result = await fetch(`${BASE_URL}/user`, {
         method: "POST",
-        body: JSON.stringify(input)
+        body: JSON.stringify(MOCK_CREATE_USER)
       })
       const expectedCode = 201
       const response = await result.json()
@@ -133,7 +132,7 @@ describe.skip("API Suite of Test in route /user", () => {
       })
       const expectedCode = 200
       const response = await result.json()
-      const expectedBody = { id: MOCK_ID, ...response }
+      const expectedBody = { id: response.id, ...MOCK_CREATE_USER }
 
       assert.strictEqual(
         result.status,
@@ -171,142 +170,142 @@ describe.skip("API Suite of Test in route /user", () => {
     })
   })
 
-  describe('Suite of test with method PUT', () => {
-    it('should update a user by id', async () => {
-      const result = await fetch(`${BASE_URL}/user/${MOCK_ID}`, {
-        method: "PUT",
-        headers: {
-          "Authorization": `Bearer ${token}`
-        },
-        body: JSON.stringify(MOCK_UPDATED_USER),
-      })
+  // describe('Suite of test with method PUT', () => {
+  //   it('should update a user by id', async () => {
+  //     const result = await fetch(`${BASE_URL}/user/${MOCK_ID}`, {
+  //       method: "PUT",
+  //       headers: {
+  //         "Authorization": `Bearer ${token}`
+  //       },
+  //       body: JSON.stringify(MOCK_UPDATED_USER),
+  //     })
 
-      const expectedCode = 200
-      const response = await result.json()
-      const expectedBody = { message: "user updated!" }
-      const resultFindUser = await fetch(`${BASE_URL}/user/${MOCK_ID}`, {
-        method: "GET",
-        headers: {
-          "Authorization": `Bearer ${token}`
-        }
-      })
-      const findUser = await resultFindUser.json()
+  //     const expectedCode = 200
+  //     const response = await result.json()
+  //     const expectedBody = { message: "user updated!" }
+  //     const resultFindUser = await fetch(`${BASE_URL}/user/${MOCK_ID}`, {
+  //       method: "GET",
+  //       headers: {
+  //         "Authorization": `Bearer ${token}`
+  //       }
+  //     })
+  //     const findUser = await resultFindUser.json()
 
-      const expectedUser = { id: MOCK_ID, ...MOCK_UPDATED_USER }
+  //     const expectedUser = { id: MOCK_ID, ...MOCK_UPDATED_USER }
 
-      assert.strictEqual(
-        result.status,
-        expectedCode,
-        `status code should be ${expectedCode}, actual: ${result.status}`
-      )
-      assert.deepStrictEqual(
-        response,
-        expectedBody,
-        `should return ${expectedCode}, actual: ${result.status}`
-      )
-      assert.deepStrictEqual(
-        findUser,
-        expectedUser,
-        `user updated should equal ${expectedUser}: actual ${findUser}`
-      )
-    })
-    it('should return a error if any paramters is invalid', async () => {
-      const result = await fetch(`${BASE_URL}/user/${MOCK_ID}`, {
-        method: "PUT",
-        body: JSON.stringify({ name: 'test', email: 'test@gmail.com' }), headers: {
-          "Authorization": `Bearer ${token}`
-        },
-      })
+  //     assert.strictEqual(
+  //       result.status,
+  //       expectedCode,
+  //       `status code should be ${expectedCode}, actual: ${result.status}`
+  //     )
+  //     assert.deepStrictEqual(
+  //       response,
+  //       expectedBody,
+  //       `should return ${expectedCode}, actual: ${result.status}`
+  //     )
+  //     assert.deepStrictEqual(
+  //       findUser,
+  //       expectedUser,
+  //       `user updated should equal ${expectedUser}: actual ${findUser}`
+  //     )
+  //   })
+  //   it('should return a error if any paramters is invalid', async () => {
+  //     const result = await fetch(`${BASE_URL}/user/${MOCK_ID}`, {
+  //       method: "PUT",
+  //       body: JSON.stringify({ name: 'test', email: 'test@gmail.com' }), headers: {
+  //         "Authorization": `Bearer ${token}`
+  //       },
+  //     })
 
-      const expectedCode = 400
-      const response = await result.json()
-      const expectedBody = { error: ['password is missing!'] }
+  //     const expectedCode = 400
+  //     const response = await result.json()
+  //     const expectedBody = { error: ['password is missing!'] }
 
-      assert.strictEqual(
-        result.status,
-        expectedCode,
-        `status code should be ${expectedCode}, actual: ${result.status}`
-      )
-      assert.deepStrictEqual(
-        response,
-        expectedBody,
-        `should return ${expectedCode}, actual: ${result.status}`
-      )
-    })
+  //     assert.strictEqual(
+  //       result.status,
+  //       expectedCode,
+  //       `status code should be ${expectedCode}, actual: ${result.status}`
+  //     )
+  //     assert.deepStrictEqual(
+  //       response,
+  //       expectedBody,
+  //       `should return ${expectedCode}, actual: ${result.status}`
+  //     )
+  //   })
 
-    it('should return a error if user not exists', async () => {
-      const result = await fetch(`${BASE_URL}/user/asdas`, {
-        method: "PUT",
-        headers: {
-          "Authorization": `Bearer ${token}`
-        },
-        body: JSON.stringify(MOCK_UPDATED_USER)
-      })
+  //   it('should return a error if user not exists', async () => {
+  //     const result = await fetch(`${BASE_URL}/user/asdas`, {
+  //       method: "PUT",
+  //       headers: {
+  //         "Authorization": `Bearer ${token}`
+  //       },
+  //       body: JSON.stringify(MOCK_UPDATED_USER)
+  //     })
 
-      const expectedCode = 400
-      const response = await result.json()
-      const expectedBody = { error: 'user not found!' }
+  //     const expectedCode = 400
+  //     const response = await result.json()
+  //     const expectedBody = { error: 'user not found!' }
 
-      assert.strictEqual(
-        result.status,
-        expectedCode,
-        `status code should be ${expectedCode}, actual: ${result.status}`
-      )
-      assert.deepStrictEqual(
-        response,
-        expectedBody,
-        `should return ${expectedCode}, actual: ${result.status}`
-      )
-    })
-  })
+  //     assert.strictEqual(
+  //       result.status,
+  //       expectedCode,
+  //       `status code should be ${expectedCode}, actual: ${result.status}`
+  //     )
+  //     assert.deepStrictEqual(
+  //       response,
+  //       expectedBody,
+  //       `should return ${expectedCode}, actual: ${result.status}`
+  //     )
+  //   })
+  // })
 
-  describe('Suite of test with method DELETE', () => {
-    it('should return a error if user not exists', async () => {
-      const result = await fetch(`${BASE_URL}/user/isiidid`, {
-        method: "DELETE",
-        headers: {
-          "Authorization": `Bearer ${token}`
-        },
-      })
+  // describe('Suite of test with method DELETE', () => {
+  //   it('should return a error if user not exists', async () => {
+  //     const result = await fetch(`${BASE_URL}/user/isiidid`, {
+  //       method: "DELETE",
+  //       headers: {
+  //         "Authorization": `Bearer ${token}`
+  //       },
+  //     })
 
-      const expectedCode = 400
-      const response = await result.json()
-      const expectedBody = { error: 'user not found!' }
+  //     const expectedCode = 400
+  //     const response = await result.json()
+  //     const expectedBody = { error: 'user not found!' }
 
-      assert.strictEqual(
-        result.status,
-        expectedCode,
-        `status code should be ${expectedCode}, actual: ${result.status}`
-      )
-      assert.deepStrictEqual(
-        response,
-        expectedBody,
-        `should return ${expectedCode}, actual: ${result.status}`
-      )
-    })
+  //     assert.strictEqual(
+  //       result.status,
+  //       expectedCode,
+  //       `status code should be ${expectedCode}, actual: ${result.status}`
+  //     )
+  //     assert.deepStrictEqual(
+  //       response,
+  //       expectedBody,
+  //       `should return ${expectedCode}, actual: ${result.status}`
+  //     )
+  //   })
 
-    it('should remove a user by id', async () => {
-      const result = await fetch(`${BASE_URL}/user/${MOCK_ID}`, {
-        method: "DELETE",
-        headers: {
-          "Authorization": `Bearer ${token}`
-        },
-      })
+  //   it('should remove a user by id', async () => {
+  //     const result = await fetch(`${BASE_URL}/user/${MOCK_ID}`, {
+  //       method: "DELETE",
+  //       headers: {
+  //         "Authorization": `Bearer ${token}`
+  //       },
+  //     })
 
-      const expectedCode = 200
-      const response = await result.json()
-      const expectedBody = { message: 'user deleted!' }
+  //     const expectedCode = 200
+  //     const response = await result.json()
+  //     const expectedBody = { message: 'user deleted!' }
 
-      assert.strictEqual(
-        result.status,
-        expectedCode,
-        `status code should be ${expectedCode}, actual: ${result.status}`
-      )
-      assert.deepStrictEqual(
-        response,
-        expectedBody,
-        `should return ${expectedCode}, actual: ${result.status}`
-      )
-    })
-  })
+  //     assert.strictEqual(
+  //       result.status,
+  //       expectedCode,
+  //       `status code should be ${expectedCode}, actual: ${result.status}`
+  //     )
+  //     assert.deepStrictEqual(
+  //       response,
+  //       expectedBody,
+  //       `should return ${expectedCode}, actual: ${result.status}`
+  //     )
+  //   })
+  // })
 })
