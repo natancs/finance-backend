@@ -9,6 +9,9 @@ export function itemRoutes(app) {
   app.get("/item", async (request, response) => {
     new FindItem().handler(request, response)
   })
+  app.get("/item/:id", async (request, response) => {
+    new FindItem().handler(request, response)
+  })
 
   return app
 }

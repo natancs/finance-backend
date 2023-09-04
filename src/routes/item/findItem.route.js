@@ -10,6 +10,7 @@ export class FindItem {
   }
   async handler(request, response) {
     try {
+      const { id } = request.params
       authValidate(request)
       const userId = request.userId
       const findItem = this.contextStrategy.find(userId)
@@ -18,7 +19,15 @@ export class FindItem {
         throw new Error("user not found!")
       }
 
-      const items = findItem.filter(item => item.userId === userId)
+      let items = findItem.filter(item => item.userId === userId)
+
+      if (id) {
+        items = this.contextStrategy.find(id)
+
+        if (!items) {
+          throw new Error("item not found!")
+        }
+      }
 
       response.writeHead(200, DEFAULT_HEADER)
       response.write(JSON.stringify(items))

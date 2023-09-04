@@ -9,6 +9,7 @@ describe(
     let _server = {}
     let USER_ID = ''
     let token
+    let MOCK_ITEM_ID = ''
 
     before(async () => {
       _server = server
@@ -42,7 +43,7 @@ describe(
     after((done) => _server.close(done))
 
     describe('Suite of test with method POST', () => {
-      it('should create a new item ande return a message', async () => {
+      it('should create a new item and return a message', async () => {
         const input = {
           name: "pão",
           description: "pão",
@@ -60,7 +61,9 @@ describe(
         })
         const expectedCode = 200
         const response = await result.json()
-        const expectedBody = { message: "new item created!" }
+        const expectedBody = { id: response.id, message: "new item created!" }
+
+        MOCK_ITEM_ID = response.id
 
         assert.strictEqual(
           result.status,
@@ -133,7 +136,7 @@ describe(
     })
 
     describe('Suite of test with method GET', () => {
-      it('should find all items by id', async () => {
+      it('should find all items by userId', async () => {
         const result = await fetch(`${BASE_URL}/item`, {
           method: "GET",
           headers: {
@@ -154,51 +157,58 @@ describe(
         )
       })
 
-      // it('should find user by id', async () => {
-      //   const result = await fetch(`${BASE_URL}/user/${MOCK_ID}`, {
-      //     method: "GET",
-      //     headers: {
-      //       "Authorization": `Bearer ${token}`
-      //     },
-      //   })
-      //   const expectedCode = 200
-      //   const response = await result.json()
-      //   const expectedBody = { id: MOCK_ID, ...response }
+      it('should find item by id', async () => {
+        const result = await fetch(`${BASE_URL}/item/${MOCK_ITEM_ID}`, {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}`
+          },
+        })
+        const expectedCode = 200
+        const response = await result.json()
+        const expectedBody = {
+          id: MOCK_ITEM_ID,
+          name: "pão",
+          description: "pão",
+          price: 5,
+          type: "alimento",
+          userId: USER_ID
+        }
 
-      //   assert.strictEqual(
-      //     result.status,
-      //     expectedCode,
-      //     `status code should be ${expectedCode}, actual: ${result.status}`
-      //   )
-      //   assert.deepStrictEqual(
-      //     response,
-      //     expectedBody,
-      //     `should return ${expectedCode}, actual: ${result.status}`
-      //   )
-      // })
+        assert.strictEqual(
+          result.status,
+          expectedCode,
+          `status code should be ${expectedCode}, actual: ${result.status}`
+        )
+        assert.deepStrictEqual(
+          response,
+          expectedBody,
+          `should return ${expectedCode}, actual: ${result.status}`
+        )
+      })
 
-      // it('should return a error if id not exists', async () => {
-      //   const result = await fetch(`${BASE_URL}/user/2`, {
-      //     method: "GET",
-      //     headers: {
-      //       "Authorization": `Bearer ${token}`
-      //     },
-      //   })
-      //   const expectedCode = 400
-      //   const response = await result.json()
-      //   const expectedBody = { error: "user not found!" }
+      it('should return a error if id not exists', async () => {
+        const result = await fetch(`${BASE_URL}/item/2`, {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}`
+          },
+        })
+        const expectedCode = 400
+        const response = await result.json()
+        const expectedBody = { error: "item not found!" }
 
-      //   assert.strictEqual(
-      //     result.status,
-      //     expectedCode,
-      //     `status code should be ${expectedCode}, actual: ${result.status}`
-      //   )
-      //   assert.deepStrictEqual(
-      //     response,
-      //     expectedBody,
-      //     `should return ${expectedCode}, actual: ${result.status}`
-      //   )
-      // })
+        assert.strictEqual(
+          result.status,
+          expectedCode,
+          `status code should be ${expectedCode}, actual: ${result.status}`
+        )
+        assert.deepStrictEqual(
+          response,
+          expectedBody,
+          `should return ${expectedCode}, actual: ${result.status}`
+        )
+      })
     })
 
     // describe('Suite of test with method PUT', () => {

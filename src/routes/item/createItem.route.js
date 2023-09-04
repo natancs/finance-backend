@@ -23,7 +23,7 @@ export class CreateItem {
       await this.contextStrategy.create(item)
 
       response.writeHead(200, DEFAULT_HEADER)
-      response.write(JSON.stringify({ message: "new item created!" }))
+      response.write(JSON.stringify({ id: item.id, message: "new item created!" }))
       return response.end()
     } catch (error) {
       response.writeHead(400, DEFAULT_HEADER)

@@ -19,11 +19,12 @@ export class InMemoryStrategy extends ContextStrategy {
     return data
   }
 
-  find({where}) {
-    let result = ''
+  find(where) {
+    let result = []
 
     if (where) {
       result = this.db.filter(item => item[this.#findKeyForValue(item, where)] === where)
+
       if (result.length === 1) result = result[0]
       if (result.length === 0) {
         result = false
