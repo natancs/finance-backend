@@ -19,7 +19,12 @@ export function authValidate(request) {
     }
 
     // if there is an error, it already plays for catch
-    jwt.verify(token, secretKey)
+    jwt.verify(token, secretKey, (error, decoded) => {
+      if (error) {
+        throw new Error('Failed to authenticate token.')
+      }
+      request.userId = decoded.id
+    })
 
     return {
       isValid: true,

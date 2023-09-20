@@ -1,3 +1,3 @@
-import { app } from "./server.js";
+import { server } from "./server.js";
 
-app.listen(3333, console.log("Server is running in http://localhost:3333"))
+server.listen(3333, console.log("Server is running in http://localhost:3333"))

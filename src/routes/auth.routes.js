@@ -5,7 +5,7 @@ import { ContextStrategy } from '../strategies/context.js';
 import { InMemoryStrategy } from '../strategies/InMemoryStrategy.js';
 import { inMemoryDB } from '../database/inMemoryDB.js';
 
-export class AuthRoute {
+class AuthRoute {
   constructor() {
     this.repository = new ContextStrategy(new InMemoryStrategy(inMemoryDB))
   }
@@ -35,4 +35,12 @@ export class AuthRoute {
       return response.end()
     }
   }
+}
+
+export function authRoute(app) {
+  app.post("/login", async (request, response) => {
+    new AuthRoute().handler(request, response)
+  })
+
+  return app
 }

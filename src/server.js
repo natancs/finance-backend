@@ -1,18 +1,10 @@
-import { createServer } from "node:http"
-import { DEFAULT_HEADER, Routes } from "./routes/index.routes.js"
+import http20 from "./lib/http2.0.js"
+import { routes } from "./routes/index.routes.js"
 
-function hadlerError(response) {
-  return error => {
-    console.log("Error", error)
-    response.writeHead(500, DEFAULT_HEADER)
-    return response.end()
-  }
-}
+const app = http20()
 
-function handler(request, response) {
-  Routes.main(request, response).catch(hadlerError(response))
-}
+routes(app)
 
-const app = createServer(handler)
+const server = app.createServer()
 
-export { app }
+export { server }
