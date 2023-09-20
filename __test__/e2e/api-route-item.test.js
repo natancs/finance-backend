@@ -254,7 +254,7 @@ describe("Suite of test in route /item", () => {
       );
     });
 
-    it("should return a error if user not exists", async () => {
+    it("should return a error if item not exists", async () => {
       const input = {
         name: "arroz",
         description: "arroz",
@@ -287,53 +287,53 @@ describe("Suite of test in route /item", () => {
     });
   });
 
-  // describe('Suite of test with method DELETE', () => {
-  //   it('should return a error if user not exists', async () => {
-  //     const result = await fetch(`${BASE_URL}/user/isiidid`, {
-  //       method: "DELETE",
-  //       headers: {
-  //         "Authorization": `Bearer ${token}`
-  //       },
-  //     })
+  describe("Suite of test with method DELETE", () => {
+    it("should return a error if item not exists", async () => {
+      const result = await fetch(`${BASE_URL}/item/isiidid`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-  //     const expectedCode = 400
-  //     const response = await result.json()
-  //     const expectedBody = { error: 'user not found!' }
+      const expectedCode = 400;
+      const response = await result.json();
+      const expectedBody = { error: "item not found!" };
 
-  //     assert.strictEqual(
-  //       result.status,
-  //       expectedCode,
-  //       `status code should be ${expectedCode}, actual: ${result.status}`
-  //     )
-  //     assert.deepStrictEqual(
-  //       response,
-  //       expectedBody,
-  //       `should return ${expectedCode}, actual: ${result.status}`
-  //     )
-  //   })
+      assert.strictEqual(
+        result.status,
+        expectedCode,
+        `status code should be ${expectedCode}, actual: ${result.status}`,
+      );
+      assert.deepStrictEqual(
+        response,
+        expectedBody,
+        `should return ${expectedCode}, actual: ${result.status}`,
+      );
+    });
 
-  //   it('should remove a user by id', async () => {
-  //     const result = await fetch(`${BASE_URL}/user/${MOCK_ID}`, {
-  //       method: "DELETE",
-  //       headers: {
-  //         "Authorization": `Bearer ${token}`
-  //       },
-  //     })
+    it("should remove a item by id", async () => {
+      const result = await fetch(`${BASE_URL}/item/${MOCK_ITEM_ID}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-  //     const expectedCode = 200
-  //     const response = await result.json()
-  //     const expectedBody = { message: 'user deleted!' }
+      const expectedCode = 200;
+      const response = await result.json();
+      const expectedBody = { message: "item deleted!" };
 
-  //     assert.strictEqual(
-  //       result.status,
-  //       expectedCode,
-  //       `status code should be ${expectedCode}, actual: ${result.status}`
-  //     )
-  //     assert.deepStrictEqual(
-  //       response,
-  //       expectedBody,
-  //       `should return ${expectedCode}, actual: ${result.status}`
-  //     )
-  //   })
-  // })
+      assert.strictEqual(
+        result.status,
+        expectedCode,
+        `status code should be ${expectedCode}, actual: ${result.status}`,
+      );
+      assert.deepStrictEqual(
+        response,
+        expectedBody,
+        `should return ${expectedCode}, actual: ${result.status}`,
+      );
+    });
+  });
 });
