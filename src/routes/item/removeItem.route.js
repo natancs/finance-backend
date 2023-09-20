@@ -12,9 +12,7 @@ export class DeleteItem {
       const deleteItem = await contextStrategy.delete(id);
 
       if (!deleteItem) {
-        response.writeHead(400, DEFAULT_HEADER);
-        response.write(JSON.stringify({ error: "item not found!" }));
-        return response.end();
+        throw new Error("item not found!");
       }
 
       response.writeHead(200, DEFAULT_HEADER);
