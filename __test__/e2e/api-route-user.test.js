@@ -86,19 +86,11 @@ describe("API Suite of Test in route /user", () => {
 
       const result = await fetch(`${BASE_URL}/user`, {
         method: "POST",
-<<<<<<< HEAD
-        body: JSON.stringify(input)
-      })
-      const expectedCode = 400
-      const response = await result.json()
-      const expectedBody = { error: "name is missing!" }
-=======
         body: JSON.stringify(input),
       });
       const expectedCode = 400;
       const response = await result.json();
       const expectedBody = { error: ["name is missing!"] };
->>>>>>> development
 
       assert.strictEqual(
         result.status,
@@ -230,15 +222,9 @@ describe("API Suite of Test in route /user", () => {
         },
       });
 
-<<<<<<< HEAD
-      const expectedCode = 400
-      const response = await result.json()
-      const expectedBody = { error: 'password is missing!' }
-=======
       const expectedCode = 400;
       const response = await result.json();
       const expectedBody = { error: ["password is missing!"] };
->>>>>>> development
 
       assert.strictEqual(
         result.status,
