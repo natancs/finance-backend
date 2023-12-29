@@ -1,5 +1,6 @@
 import http from 'node:http'
 import url from 'node:url'
+import { DEFAULT_HEADER } from '../routes/index.routes.js'
 
 class MyHTTP {
   constructor() {
@@ -7,35 +8,43 @@ class MyHTTP {
     this.middlewares = []
   }
 
-  get(path, handler) {
+  get(path, handlerRoute) {
     this.routes.push({
       method: "GET",
       path,
-      handler
+      async handler(request, response) {
+        return await handlerRoute(request, response)
+      }
     })
   }
 
-  post(path, handler) {
+  post(path, handlerRoute) {
     this.routes.push({
       method: 'POST',
       path,
-      handler
+      async handler(request, response) {
+        return await handlerRoute(request, response)
+      }
     })
   }
 
-  put(path, handler) {
+  put(path, handlerRoute) {
     this.routes.push({
       method: "PUT",
       path,
-      handler
+      async handler(request, response) {
+        return await handlerRoute(request, response)
+      }
     })
   }
 
-  delete(path, handler) {
+  delete(path, handlerRoute) {
     this.routes.push({
       method: "DELETE",
       path,
-      handler
+      async handler(request, response) {
+        return await handlerRoute(request, response)
+      }
     })
   }
 
@@ -47,7 +56,7 @@ class MyHTTP {
     if (index < this.middlewares.length) {
       const middleware = this.middlewares[index]
       middleware(request, response, () => {
-        next(index + 1, request, response, route)
+        this.next(index + 1, request, response, route)
       }).catch(this.handlerError(response))
     } else {
       route.handler(request, response).catch(this.handlerError(response))
